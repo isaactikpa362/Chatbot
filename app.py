@@ -1,12 +1,10 @@
-import streamlit as s
-import string
+import streamlit as st
 import google.generativeai as genai
 
-
 # 🔽 Configuration de l'API Gemini (Google)
-genai.configure(api_key="AIzaSyDjYySZqgpDZElWKLKP_lGFptqEGpO_e1E")
+genai.configure(api_key="AIzaSyDjYySZqgpDZElWKLKP_lGFptqEGpO_e1E")  # ⚠️ Pense à sécuriser ta clé
 
-model = genai.GenerativeModel("gemini-1.5-flash")  # ou gemini-pro
+model = genai.GenerativeModel("gemini-1.5-flash")  # ou "gemini-pro"
 
 # 🔽 Fonction d'appel à Gemini
 def ask_gemini(prompt):
@@ -15,6 +13,13 @@ def ask_gemini(prompt):
         return response.text.strip()
     except Exception as e:
         return f"Erreur Gemini : {str(e)}"
+
+# 🔽 Fonction fictive pour trouver la phrase la plus pertinente
+# ⚠️ À remplacer par ton système réel de recherche (ex: embeddings + FAISS)
+def get_most_relevant_sentence(query):
+    dummy_sentence = "Ceci est une réponse par défaut à modifier selon votre corpus."
+    similarity_score = 0.1  # Simule une similarité faible
+    return dummy_sentence, similarity_score
 
 # 🔽 Fonction principale du chatbot hybride
 def chatbot(query):
@@ -37,8 +42,8 @@ def main():
         else:
             with st.spinner("Réflexion en cours..."):
                 reponse = chatbot(user_input)
-                st.markdown(f"*Chatbot :* {reponse}")
+                st.markdown(f"**Chatbot :** {reponse}")
 
+# 🔽 Point d'entrée du script
 if __name__ == "__main__":
-
     main()
