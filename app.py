@@ -14,13 +14,6 @@ def ask_gemini(prompt):
     except Exception as e:
         return f"Erreur Gemini : {str(e)}"
 
-# 🔽 Fonction fictive pour trouver la phrase la plus pertinente
-# ⚠️ À remplacer par ton système réel de recherche (ex: embeddings + FAISS)
-def get_most_relevant_sentence(query):
-    dummy_sentence = "Ceci est une réponse par défaut à modifier selon votre corpus."
-    similarity_score = 0.1  # Simule une similarité faible
-    return dummy_sentence, similarity_score
-
 # 🔽 Fonction principale du chatbot hybride
 def chatbot(query):
     best_sentence, similarity = get_most_relevant_sentence(query)
