@@ -1,45 +1,7 @@
-import streamlit as st
-import nltk
+import streamlit as s
 import string
-from nltk.tokenize import word_tokenize, sent_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
 import google.generativeai as genai
 
-# 🔽 Initialisation et téléchargements NLTK
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('stopwords')
-nltk.download('wordnet')
-
-# 🔽 Tokenisation en phrases
-sentences = sent_tokenize(data)
-
-# 🔽 Préparation outils NLTK
-lemmatizer = WordNetLemmatizer()
-stop_words = set(stopwords.words('french'))
-
-# 🔽 Prétraitement d'une phrase
-def preprocess(sentence):
-    words = word_tokenize(sentence)
-    words = [word.lower() for word in words if word.lower() not in stop_words and word not in string.punctuation]
-    words = [lemmatizer.lemmatize(word) for word in words]
-    return words
-
-# 🔽 Corpus prétraité
-corpus = [preprocess(sentence) for sentence in sentences]
-
-# 🔽 Fonction de similarité de Jaccard
-def get_most_relevant_sentence(query):
-    query_processed = preprocess(query)
-    max_similarity = 0
-    best_sentence = ""
-    for i, sentence in enumerate(corpus):
-        similarity = len(set(query_processed).intersection(sentence)) / float(len(set(query_processed).union(sentence)))
-        if similarity > max_similarity:
-            max_similarity = similarity
-            best_sentence = sentences[i]
-    return best_sentence, max_similarity
 
 # 🔽 Configuration de l'API Gemini (Google)
 genai.configure(api_key="AIzaSyDjYySZqgpDZElWKLKP_lGFptqEGpO_e1E")
