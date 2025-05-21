@@ -1,12 +1,18 @@
+import os
 import streamlit as st
 import google.generativeai as genai
 
-# 🔽 Configuration de l'API Gemini (Google)
-genai.configure(api_key="AIzaSyDjYySZqgpDZElWKLKP_lGFptqEGpO_e1E")  # ⚠️ Pense à sécuriser ta clé
+# Récupérer la clé API depuis la variable d'environnement
+api_key = os.getenv("AIzaSyDjYySZqgpDZElWKLKP_lGFptqEGpO_e1E")
 
-model = genai.GenerativeModel("gemini-1.5-flash")  # ou "gemini-pro"
+if api_key is None:
+    st.error("Erreur : La clé API Gemini n'est pas définie dans la variable d'environnement GEMINI_API_KEY.")
+    st.stop()
 
-# 🔽 Fonction d'appel à Gemini
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+# Fonction d'appel à Gemini
 def ask_gemini(prompt):
     try:
         response = model.generate_content(prompt)
@@ -14,18 +20,14 @@ def ask_gemini(prompt):
     except Exception as e:
         return f"Erreur Gemini : {str(e)}"
 
-# 🔽 Fonction principale du chatbot hybride
+# Fonction principale (directement Gemini)
 def chatbot(query):
-    best_sentence, similarity = get_most_relevant_sentence(query)
-    if similarity < 0.2:
-        return ask_gemini(query)
-    else:
-        return best_sentence
+    return ask_gemini(query)
 
-# 🔽 Interface Streamlit
+# Interface Streamlit
 def main():
-    st.title("🤖 Mon Chatbot Intelligent (texte + Gemini)")
-    st.write("Pose une question sur le texte fourni. Gemini prend le relais si besoin.")
+    st.title("🤖 Mon Chatbot Intelligent (Gemini uniquement)")
+    st.write("Pose ta question, Gemini répond directement.")
 
     user_input = st.text_input("Vous :")
 
@@ -37,6 +39,6 @@ def main():
                 reponse = chatbot(user_input)
                 st.markdown(f"**Chatbot :** {reponse}")
 
-# 🔽 Point d'entrée du script
 if __name__ == "__main__":
     main()
+
